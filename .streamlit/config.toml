@@ -1,0 +1,9 @@
+[theme]
+baseFontSize = 18
+
+[theme.light]
+primaryColor = "rgb(81, 156, 58)"
+
+[theme.dark]
+primaryColor = "rgb(82, 179, 50)"
+backgroundColor = "rgb(8, 10, 0)"
