@@ -43,16 +43,16 @@ def print_episode_analysis(dataset: Dataset):
                 st.text(
                     "При рассмотрении данного эпизода можно отметить следующие средства реализации концепта FEAR:"
                 )
-                titles = [
-                    f"Все ({(episode.word_count())})",
-                    f"Существительные и местоимения ({episode.word_count("noun")})",
-                    f"Прилагательные ({episode.word_count("adjective")})",
-                    f"Глаголы ({episode.word_count("verb")})",
-                    f"Наречия ({episode.word_count("adverb")})",
-                ]
-                wordcategory_tabs = st.tabs(titles)
+                titles: dict[str, PartOfSpeech | None] = {
+                    f"Все ({(episode.word_count())})": None,
+                    f"Существительные и местоимения ({episode.word_count("noun")})": "noun",
+                    f"Прилагательные ({episode.word_count("adjective")})": "adjective",
+                    f"Глаголы ({episode.word_count("verb")})": "verb",
+                    f"Наречия ({episode.word_count("adverb")})": "adverb",
+                }
+                wordcategory_tabs = st.tabs(list(titles.keys()))
                 for j, wordcategory_tab in enumerate(wordcategory_tabs):
-                    category = [None, *Word.all_parts_of_speech()][j]
+                    category = list(titles.values())[j]
                     with wordcategory_tab:
                         st.write(
                             ", ".join(
