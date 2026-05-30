@@ -37,6 +37,7 @@ class Dataset:
                 lexems = Lexems(kernel_words, close_words, far_words)
 
             episodes.append(Episode(title, transcript, words, lexems))
+        episodes.sort(key=lambda ep: Episode.sort_key(ep.title))
         return cls(episodes)
 
 
@@ -76,6 +77,7 @@ def episodes_to_dataframe(
     df = df.pivot(index="word", columns="episode", values="count").reindex(
         index=df["word"].unique()
     )
+    df = df[sorted(df.columns, key=Episode.sort_key)]
     return df
 
 
@@ -115,6 +117,22 @@ class Episode:
 
     def __str__(self) -> str:
         return self.title
+
+    @staticmethod
+    def sort_key(title: str) -> int:
+        ORDER = [
+            "Tucked In",
+            "First Hunt",
+            "We All Ignore the Pit",
+            "Contaminant",
+            "The Piper",
+            "Alone",
+            "Dead Woman Walking",
+        ]
+        try:
+            return ORDER.index(title)
+        except ValueError:
+            return len(ORDER)
 
 
 @dataclass
