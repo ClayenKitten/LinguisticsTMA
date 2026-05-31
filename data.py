@@ -144,15 +144,15 @@ class Lexems:
     def build_svg(self) -> str:
         doc = XmlDoc()
         with doc.tag("svg", xmlns="http://www.w3.org/2000/svg", viewBox="0 0 200 200"):
-            for r in [90, 60, 30]:
+            for r in [100, 70, 43]:
                 c, w, b = 100, "white", "black"
                 doc.stag("circle", cx=c, cy=c, r=r, fill=w, stroke=b, stroke_width="1")
 
-            def draw_words(words: Sequence[str], radius: float, font: float):
+            def draw_words(words: Sequence[str], radius: float, font: float, angle_offset: float = 0):
                 for i, word in enumerate(words):
                     angle = 2 * pi / len(words) * i - 0.5 * pi
-                    x = 100 + radius * cos(angle)
-                    y = 100 + radius * sin(angle)
+                    x = 100 + radius * cos(angle + angle_offset)
+                    y = 100 + radius * sin(angle + angle_offset) + 2 # Custom offset so it looks better
                     doc.line(
                         "text",
                         word,
@@ -161,10 +161,10 @@ class Lexems:
                         **{"font-size": font, "text-anchor": "middle"},
                     )
 
-            draw_words(self.kernel_words[:4], 8, 4)
-            draw_words(self.kernel_words[4:], 20, 4)
-            draw_words(self.close_words, 45, 4)
-            draw_words(self.far_words, 75, 4)
+            draw_words(self.kernel_words[:4], 12, 6.5)
+            draw_words(self.kernel_words[4:], 28, 6.5)
+            draw_words(self.close_words, 56.5, 6.5)
+            draw_words(self.far_words, 85, 6.5, 0.40 * pi)
 
         return doc.getvalue()
 
